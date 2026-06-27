@@ -55,6 +55,17 @@ audit*).
 | Manual-review load | 0.08% of traffic (within capacity) |
 | Loss vs. approve-everything | **$4,194 vs. $15,408 → ~73% reduction** |
 
+**Precision-Recall & ROC curves (deployed XGBoost):**
+
+![PR and ROC curves](reports/curves.png)
+
+**Confusion matrices at the deployed block threshold (test set):**
+
+![Confusion matrices](reports/confusion_matrices.png)
+
+> Logistic Regression's column shows *why PR-AUC matters*: high recall and great
+> ROC-AUC, but a flood of false positives that PR-AUC exposes.
+
 ---
 
 ## Cost-based threshold tuning
@@ -76,6 +87,8 @@ split to minimise total cost, subject to a **manual-review capacity** cap
 (analysts can only review a small fraction of traffic). That capacity constraint
 is what forces high-confidence fraud to be *blocked* outright instead of
 endlessly reviewed. All cost knobs live in [`src/config.py`](src/config.py).
+
+![Cost-based threshold tuning](reports/cost.png)
 
 ---
 
