@@ -1,0 +1,32 @@
+{
+  "best_model": "xgboost",
+  "t_review": 0.008175545047760673,
+  "t_block": 0.2522897194164978,
+  "single_block_threshold": 0.0030864068349032944,
+  "cost_model": {
+    "FP_COST": 15.0,
+    "REVIEW_COST": 4.0,
+    "FN_COST_IS_AMOUNT": true,
+    "FN_COST_FLAT": 150.0
+  },
+  "validation": {
+    "approve_all_cost": 7950.55,
+    "single_threshold_cost": 2647.71,
+    "decision_band_cost": 1630.0555
+  },
+  "test": {
+    "approve_all_cost": 15408.04,
+    "decision_band_cost": 4193.622,
+    "savings_vs_approve_all": 11214.418000000001,
+    "metrics_at_block_threshold": {
+      "threshold": 0.2522897194164978,
+      "precision": 0.9358974358974359,
+      "recall": 0.7684210526315789,
+      "f1": 0.8439306358381503,
+      "tp": 73,
+      "fp": 5,
+      "fn": 22,
+      "tn": 56646
+    }
+  }
+}

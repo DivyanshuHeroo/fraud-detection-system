@@ -1,0 +1,18 @@
+# Data (144 MB — download via the curl command in README)
+data/
+*.csv
+
+# Virtual environment
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
