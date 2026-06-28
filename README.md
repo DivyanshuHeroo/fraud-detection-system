@@ -144,6 +144,34 @@ The pipeline was audited; findings and fixes:
 | **Class imbalance weight** | ✅ `scale_pos_weight` / class weights computed from `y_train` only. |
 | **Overfitting** | ⚠️ Tree models reach train PR-AUC ≈ 1.0 (full memorisation) vs test ≈ 0.82 — a ~0.12 gap that is expected for these models on separable data; reported metrics are the honest test side, and the best model is the one that generalises best on validation. |
 
+## Hyperparameter tuning
+
+`RandomizedSearchCV` was run for all four models (3-fold stratified CV on the
+**train split only**, scoring PR-AUC, with preprocessing inside the CV pipeline
+so nothing leaks). Run it with `python -m src.tune` (results in
+[`reports/tuning.json`](reports/tuning.json)).
+
+**Verdict: tuning did not beat the hand-picked baselines.**
+
+| Model | baseline val | tuned val | baseline test | tuned test |
+|---|:--:|:--:|:--:|:--:|
+| **XGBoost** (deployed) | **0.8827** | **0.8761** | 0.8196 | 0.8140 |
+| LightGBM | 0.8784 | 0.8718 | 0.8130 | 0.8208 |
+| Random Forest | 0.8741 | 0.8741 | 0.8188 | 0.8188 |
+| Logistic Regression | 0.8162 | 0.8162 | 0.6904 | 0.6904 |
+
+Takeaways:
+
+- The deltas are **±0.007 PR-AUC — within the noise floor** (only ~95 fraud cases
+  per split, so a swing this size is ~1 transaction's worth of ranking). Performance
+  here is bounded by the **0.17% positive rate, not hyperparameters**; the real lift
+  would come from richer features (velocity, device/geo, merchant risk).
+- **Model choice is made on the *validation* column, never test.** XGBoost has the
+  highest validation PR-AUC in both the baseline and tuned settings, so it stays
+  deployed. LightGBM only leads on *tuned test* — choosing it for that would be
+  test-set selection (the very leakage removed in the audit above), so it isn't a
+  valid reason to switch.
+
 ## Modelling notes
 
 - **Imbalance** is handled *inside* the models (`class_weight="balanced"` /
